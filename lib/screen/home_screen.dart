@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
     var pController = Get.find<ProductController>();
     return Obx(
       () {
-        if (pController.isLoading.value == true) {
+        if (cController.isLoading.value == true) {
           return const Center(
             child: CircularProgressIndicator.adaptive(),
           );
@@ -115,14 +115,13 @@ class HomeScreen extends StatelessWidget {
                               InkWell(
                                 onTap: () {
                                   showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      isDismissible: true,
                                       context: context,
                                       builder: (BuildContext context) {
                                         return Container(
-                                          height: 600,
-                                          width: Get.size.width,
-                                          decoration: BoxDecoration(
-                                            color: Colors.amber.shade200,
-                                          ),
+                                          height: Get.size.height - 25,
+                                          decoration: const BoxDecoration(),
                                           child: Center(
                                             child: Column(
                                               mainAxisAlignment:
