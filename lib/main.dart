@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.blue,
       ),
-      defaultTransition: Transition.fadeIn,
-      transitionDuration: const Duration(seconds: 3),
+      defaultTransition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 600),
       initialBinding: ControllerBiding(),
       home: const HomeView(),
     );

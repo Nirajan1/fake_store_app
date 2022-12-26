@@ -1,6 +1,7 @@
 import 'package:fake_store_app/controller/category_controller.dart';
 import 'package:fake_store_app/controller/producr_controller.dart';
 import 'package:fake_store_app/controller/single_product_controller.dart';
+import 'package:fake_store_app/view/single_product.dart';
 import 'package:fake_store_app/widgets/carousel_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -73,70 +74,7 @@ class HomeScreen extends StatelessWidget {
                           onTap: () {
                             spController
                                 .getProduct(pController.products[index].id);
-                            showModalBottomSheet(
-                                isScrollControlled: true,
-                                isDismissible: true,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return SizedBox(
-                                    width: Get.size.width,
-                                    height: Get.size.height - 25,
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          width: Get.size.width,
-                                          height: 200,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: NetworkImage(pController
-                                                    .products[index].image),
-                                                fit: BoxFit.contain),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(5.0),
-                                              child: Text(
-                                                pController
-                                                    .products[index].title,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.visible,
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  letterSpacing: 2.0,
-                                                ),
-                                              ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(5.0),
-                                                  child: Text(
-                                                    "Rs.${pController.products[index].price}",
-                                                    style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                });
+                            Get.to(() => const SingleProductView());
                           },
                           child: Card(
                             color: Colors.white,
@@ -147,7 +85,7 @@ class HomeScreen extends StatelessWidget {
                                 Positioned(
                                   child: SizedBox(
                                     width: Get.size.width,
-                                    height: 140,
+                                    height: 135,
                                     child: Image(
                                       fit: BoxFit.contain,
                                       image: NetworkImage(
@@ -178,6 +116,8 @@ class HomeScreen extends StatelessWidget {
                                         children: [
                                           Text(
                                             pController.products[index].title,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                           const SizedBox(height: 2),
                                           Text(

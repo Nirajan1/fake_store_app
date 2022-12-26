@@ -20,11 +20,39 @@ class _HomeViewState extends State<HomeView> {
         appBar: AppBar(
           title: const Text('AppBar'),
           centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () {
+                //method to show search bar
+                // showSearch(context: context, delegate: )
+              },
+              icon: const Icon(Icons.search),
+            ),
+            Stack(
+              children: [
+                const Positioned(
+                  top: 4,
+                  right: 15,
+                  child: SizedBox(
+                      child: Text(
+                    '1',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  )),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.notifications_outlined),
+                ),
+              ],
+            ),
+          ],
         ),
         bottomNavigationBar: BottomNavigationBar(
           showSelectedLabels: true,
           unselectedItemColor: Colors.lightBlueAccent,
-          selectedItemColor: Colors.amberAccent,
+          selectedItemColor: Colors.blue,
           currentIndex: selectedIndex,
           onTap: (index) {
             selectedIndex = index;
@@ -32,7 +60,7 @@ class _HomeViewState extends State<HomeView> {
           },
           items: const [
             BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined), label: 'HOME'),
+                icon: Icon(Icons.home_outlined), label: 'Home'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.dashboard_outlined), label: 'Dashed'),
             BottomNavigationBarItem(
