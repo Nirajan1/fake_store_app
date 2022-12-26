@@ -1,8 +1,9 @@
 import 'package:fake_store_app/controller/category_controller.dart';
 import 'package:fake_store_app/controller/producr_controller.dart';
+import 'package:fake_store_app/controller/single_product_controller.dart';
+import 'package:fake_store_app/widgets/carousel_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,6 +12,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var cController = Get.find<CategoryController>();
     var pController = Get.find<ProductController>();
+    var spController = Get.find<SingleProductConroller>();
     return Obx(
       () {
         if (cController.isLoading.value == true) {
@@ -21,47 +23,7 @@ class HomeScreen extends StatelessWidget {
           return SingleChildScrollView(
             child: Column(
               children: [
-                CarouselSlider(
-                  options: CarouselOptions(
-                    height: 200,
-                    autoPlay: true,
-                    aspectRatio: 2.0,
-                    enlargeCenterPage: true,
-                    enlargeStrategy: CenterPageEnlargeStrategy.height,
-                  ),
-                  items: [
-                    Container(
-                      margin: const EdgeInsets.all(6.0),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                'https://cdn.pixabay.com/photo/2022/03/03/17/53/thuja-7045798__340.jpg'),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(6.0),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                'https://cdn.pixabay.com/photo/2022/12/04/18/15/pesto-7635158__340.jpg'),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(6.0),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                'https://cdn.pixabay.com/photo/2022/11/23/16/03/butterfly-7612383__340.jpg'),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-                  ],
-                ),
+                const CarouselWidget(),
                 const ListTile(
                   title: Text('Available Category'),
                   subtitle: Text('10% off on selected items'),
@@ -107,43 +69,82 @@ class HomeScreen extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
                         decoration: const BoxDecoration(),
-                        child: Card(
-                          semanticContainer: true,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: Stack(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                      isScrollControlled: true,
-                                      isDismissible: true,
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Container(
-                                          height: Get.size.height - 25,
-                                          decoration: const BoxDecoration(),
-                                          child: Center(
-                                            child: Column(
+                        child: InkWell(
+                          onTap: () {
+                            spController
+                                .getProduct(pController.products[index].id);
+                            showModalBottomSheet(
+                                isScrollControlled: true,
+                                isDismissible: true,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return SizedBox(
+                                    width: Get.size.width,
+                                    height: Get.size.height - 25,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          width: Get.size.width,
+                                          height: 200,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: NetworkImage(pController
+                                                    .products[index].image),
+                                                fit: BoxFit.contain),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Text(
+                                                pController
+                                                    .products[index].title,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.visible,
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  letterSpacing: 2.0,
+                                                ),
+                                              ),
+                                            ),
+                                            Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                                  MainAxisAlignment.start,
                                               children: [
-                                                const Text('BottomSheetModel'),
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: const Text(
-                                                      'Close BottomSheetModel'),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(5.0),
+                                                  child: Text(
+                                                    "Rs.${pController.products[index].price}",
+                                                    style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
                                                 ),
                                               ],
-                                            ),
-                                          ),
-                                        );
-                                      });
-                                },
-                                child: Positioned(
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
+                          },
+                          child: Card(
+                            color: Colors.white,
+                            shadowColor: Colors.white,
+                            elevation: 2,
+                            child: Stack(
+                              children: [
+                                Positioned(
                                   child: SizedBox(
                                     width: Get.size.width,
                                     height: 140,
@@ -154,43 +155,43 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                              ),
-                              Positioned(
-                                right: 0,
-                                left: 150,
-                                child: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.favorite_outline),
-                                  color: Colors.red,
+                                Positioned(
+                                  right: 0,
+                                  left: 150,
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(Icons.favorite_outline),
+                                    color: Colors.red,
+                                  ),
                                 ),
-                              ),
-                              Positioned(
-                                left: 0,
-                                bottom: 0,
-                                child: Container(
-                                  height: 50,
-                                  decoration: const BoxDecoration(),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 2),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          pController.products[index].title,
-                                        ),
-                                        const SizedBox(height: 2),
-                                        Text(
-                                          'Rs.${pController.products[index].price}',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
+                                Positioned(
+                                  left: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    height: 50,
+                                    decoration: const BoxDecoration(),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 2),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            pController.products[index].title,
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            'Rs.${pController.products[index].price}',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       );

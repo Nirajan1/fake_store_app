@@ -1,5 +1,6 @@
 import 'package:fake_store_app/model/category_model.dart';
 import 'package:fake_store_app/model/product_model.dart';
+import 'package:fake_store_app/model/single_product_model.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,6 +29,23 @@ class RemoteService {
       if (response.statusCode == 200) {
         var jsonString = response.body;
         return allProductListFromJson(jsonString);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      Get.snackbar("error", e.toString());
+    }
+    return null;
+  }
+
+  //fetch singleProduct model
+  static Future<SingleProductModel?> fetchSingleProduct(int id) async {
+    var response =
+        await http.get(Uri.parse('https://fakestoreapi.com/products/$id'));
+    try {
+      if (response.statusCode == 200) {
+        var jsonString = response.body;
+        return singleProductModelFromJson(jsonString);
       } else {
         return null;
       }
